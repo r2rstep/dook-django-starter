@@ -1,0 +1,50 @@
+version: "3.3"
+services:
+
+  db:
+    image: postgres:12
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+    env_file:
+      - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    networks:
+      - pg
+      - backend
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    networks:
+      - pg
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - "5050:5050"
+
+
+  backend:
+    image: '${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}'
+    depends_on:
+      - db
+    ports:
+      - 8000:5000
+    env_file:
+      - .env
+    networks:
+      - backend
+    build:
+      context: .
+      dockerfile: docker/backend.dockerfile
+    command: /start
+
+volumes:
+  app-db-data:
+
+networks:
+  backend:
+  pg:

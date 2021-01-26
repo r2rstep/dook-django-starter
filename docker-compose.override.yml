@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+  pgadmin:
+    ports:
+      - "5050:5050"
+
+  backend:
+    volumes:
+      - .:/app
+    build:
+      context: .
+      dockerfile: docker/backend.dockerfile
+      args:
+        REQUIREMENTS_FILE_NAME: local.txt
+        PYTHONDONTWRITEBYTECODE: 1
+    command: bash -c 'chmod +x /app/docker/start.local && /app/docker/start.local'
