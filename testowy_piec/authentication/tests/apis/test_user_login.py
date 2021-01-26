@@ -32,7 +32,7 @@ def test_non_existing_user_cannot_login(client: APIClient):
 def test_existing_user_can_login_and_access_apis(client: APIClient, user: BaseUser):
     assert client.login(username=user.email, password='test')
     token = Token.objects.create(user=user)
-    client.credentials(HTTP_AUTHORIZATION='JWT ' + token.key)
+    client.credentials(HTTP_AUTHORIZATION='Bearer ' + token.key)
 
     url = reverse('api:authentication:me')
     data = {'email': user.email}
