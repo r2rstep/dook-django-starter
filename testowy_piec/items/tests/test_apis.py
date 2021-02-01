@@ -71,7 +71,7 @@ def test_paginated_list(client):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_paginated_list(client):
+def test_query_params_filter(client: APIClient):
     items = []
     for idx in range(0, 3):
         item = ItemFactory(prop=idx)
