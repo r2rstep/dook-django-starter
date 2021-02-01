@@ -8,3 +8,4 @@ class ItemView(generics.ListCreateAPIView,
                generics.RetrieveAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
+    filterset_fields = ['prop']

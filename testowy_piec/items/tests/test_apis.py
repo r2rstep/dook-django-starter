@@ -68,3 +68,21 @@ def test_paginated_list(client):
     })
     assert response.status_code == 200
     assert response.data == expected_next_page_response
+
+
+@pytest.mark.django_db(transaction=True)
+def test_paginated_list(client):
+    items = []
+    for idx in range(0, 3):
+        item = ItemFactory(prop=idx)
+        items.append(item)
+
+    url = reverse('api:items:items')
+    expected_results = [OrderedDict({'id': items[1].id,
+                                     'name': items[1].name,
+                                     'prop': items[1].prop,
+                                     })]
+
+    response = client.get(f'{url}?prop={items[1].prop}')
+    assert response.status_code == 200
+    assert response.data['results'] == expected_results
